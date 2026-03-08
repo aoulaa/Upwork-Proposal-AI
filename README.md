@@ -4,7 +4,7 @@ An intelligent, **completely free**, and **privacy-focused** Chrome Extension th
 
 ## 🚀 Features
 
-- **Gemini-Powered Proposals**: Uses **Gemini 1.5 Pro** (Recommended) for superior human-like, targeted writing and complex reasoning.
+- **Gemini-Powered Proposals**: Uses **Gemini 3.1 Pro** (Recommended) for superior human-like, targeted writing and complex reasoning.
 - **Context-Aware**: Automatically extracts job titles and descriptions from Upwork job pages.
 - **Project-Matching**: Matches your past experience from `projects.json` to the client's specific tech stack.
 - **Rule-Based Writing**: Enforces "sick intros," natural flow, and no-fluff constraints.
