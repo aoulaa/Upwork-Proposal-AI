@@ -1,4 +1,4 @@
-export async function callGemini(apiKey, fields, ctx = {}) {
+export async function callGemini(apiKey, fields, ctx = {}, model = 'gemini-3.1-pro-preview') {
     // Load profile/project/rules data bundled with the extension
     const [profileRes, projectsRes, rulesRes] = await Promise.all([
         fetch(chrome.runtime.getURL('data/profile.json')),
@@ -61,7 +61,7 @@ export async function callGemini(apiKey, fields, ctx = {}) {
     };
 
     const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

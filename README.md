@@ -4,7 +4,8 @@ An intelligent, **completely free**, and **privacy-focused** Chrome Extension th
 
 ## 🚀 Features
 
-- **Gemini-Powered Proposals**: Uses **Gemini 3.1 Pro** (Recommended) for superior human-like, targeted writing and complex reasoning.
+- **Gemini-Powered Proposals**: Uses the latest **Gemini 3.1 Pro Preview** (Recommended) for frontier-class reasoning and human-like writing.
+- **Model Selection**: Switch between Gemini 3.1, 3.0, and 2.5 models depending on your speed and quality needs.
 - **Context-Aware**: Automatically extracts job titles and descriptions from Upwork job pages.
 - **Project-Matching**: Matches your past experience from `projects.json` to the client's specific tech stack.
 - **Rule-Based Writing**: Enforces "sick intros," natural flow, and no-fluff constraints.
@@ -39,7 +40,7 @@ Before use, you must configure your freelancer data:
 1. **Set API Key**:
    - Open the extension side panel.
    - Enter your [Google Gemini API Key](https://aistudio.google.com/app/apikey).
-   - *Note: We highly recommend using the **Gemini 1.5 Pro** model for the best quality and adherence to rules.*
+   - Select your preferred model from the dropdown (we highly recommend **Gemini 3.1 Pro Preview**).
 2. **Navigate to Upwork**:
    - Go to any Upwork job post.
 3. **Generate**:

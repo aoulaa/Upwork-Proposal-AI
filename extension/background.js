@@ -50,8 +50,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "CALL_GEMINI") {
         (async () => {
             try {
-                // 1. Get API Key
-                const { geminiApiKey } = await chrome.storage.local.get('geminiApiKey');
+                // 1. Get API Key and Model
+                const { geminiApiKey, geminiModel } = await chrome.storage.local.get(['geminiApiKey', 'geminiModel']);
+                const activeModel = geminiModel || 'gemini-3.1-pro-preview';
+
                 if (!geminiApiKey) {
                     sendResponse({ success: false, error: "API key not found. Please set it in the extension." });
                     return;
@@ -60,7 +62,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 // 2. Call Gemini
                 let generatedFields;
                 try {
-                    const aiResponses = await callGemini(geminiApiKey, message.fields, message.jobContext);
+                    const aiResponses = await callGemini(geminiApiKey, message.fields, message.jobContext, activeModel);
                     generatedFields = message.fields.map((field) => ({
                         ...field,
                         generatedText: aiResponses[field.label] || aiResponses[`field_${field.index}`] || 'No response generated.'
