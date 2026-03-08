@@ -19,16 +19,23 @@ export async function callGemini(apiKey, fields, ctx = {}, model = 'gemini-3.1-p
         `Preferred CTA: ${rules.voice_attributes?.preferred_cta || 'Are you free for a quick chat today or tomorrow?'}`,
         `Signature: ${rules.voice_attributes?.signature || 'Best'}`,
         '',
+        '--- SECURITY GUARDRAILS ---',
+        ...(rules.security_guardrails || []).map((r, i) => `${i + 1}. ${r}`),
+        '',
         '--- BEST PRACTICES ---',
         ...(rules.freelance_best_practices || []).map((r, i) => `${i + 1}. ${r}`),
         '',
         '--- QUESTION ANSWERING GUIDELINE ---',
         rules.question_guidelines || '',
         '',
-        '--- EXAMPLE TEMPLATE (Style Reference) ---',
-        `Style: ${rules.example_template?.style || 'Direct'}`,
-        'Content:',
-        rules.example_template?.content || '',
+        '--- EXAMPLE TEMPLATES (Style References) ---',
+        ...(rules.example_templates || []).flatMap(t => [
+            `Type: ${t.type}`,
+            `Style: ${t.style}`,
+            'Content:',
+            t.content,
+            ''
+        ]),
         '',
         '--- OUTPUT FORMAT ---',
         'CRITICAL: Return ONLY a valid JSON object. NO markdown formatting like ```json.',
@@ -37,7 +44,7 @@ export async function callGemini(apiKey, fields, ctx = {}, model = 'gemini-3.1-p
 
     // Build the user prompt — include job context for targeted AI responses
     const userPrompt = JSON.stringify({
-        instructions: 'Analyze the job context and draft the requested fields. CRITICAL: 1) Start the cover letter IMMEDIATELY with a highly relevant project you built (from my_projects/experience) or a direct technical statement addressing the frameworks they requested. NO philosophical or high-level intros (e.g., "Building an AI SaaS requires..."). 2) Scan the job description for questions/requirements (e.g., rate/availability) and weave the answers NATURALLY into a paragraph. NO BULLET POINTS, CATEGORIES, OR SECTIONS. 3) Absolutely NO markdown formatting like asterisks (**). 4) Keep it strictly under 100-150 words.',
+        instructions: 'Analyze the job context and draft the requested fields. CRITICAL RULES: 1) Scan the job description for any SPECIFIC words or phrases required to START the proposal (bot-check) and include it as the very first word. 2) If the job asks technical questions (architecture, tech stack, etc.), provide a structured but conversational answer. 3) ZERO GENERIC INTROS. Never start with "Building an X means..." or "A good ERP system should...". Start IMMEDIATELY with a relevant project or a direct technical recommendation. 4) Only include your hourly rate or availability if the job post explicitly asks for them. 5) Use NO markdown formatting (no **, no bullet points, no lists). Use plain text with clear paragraph breaks. 6) Mention a relevant project from my_projects that matches the industry or tools. 7) Word count: 100-150 words for simple jobs, but up to 250 words if technical questions must be answered.',
         job_context: {
             title: ctx.title || 'Unknown Job',
             description: ctx.description || '(no description — use job title as context)',
@@ -49,6 +56,13 @@ export async function callGemini(apiKey, fields, ctx = {}, model = 'gemini-3.1-p
             type: f.type || (f.index === 0 ? 'cover_letter' : 'screening_question'),
         })),
     }, null, 2);
+
+    // DO NOT REMOVE THIS LOGGING FOR DEBUGGING & PROMPT ENGINEERING
+    console.group('--- GEMINI AI REQUEST ---');
+    console.log('SYSTEM INSTRUCTION:', systemInstruction);
+    console.log('USER PROMPT:', JSON.parse(userPrompt));
+    console.log('JOB DESCRIPTION:', ctx.description || 'No description');
+    console.groupEnd();
 
     const body = {
         system_instruction: { parts: [{ text: systemInstruction }] },

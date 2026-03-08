@@ -165,15 +165,59 @@ function extractJobTitle() {
 
 // Job description is harder — look for the job details section
 function extractJobDescription() {
+    // 1. Try to find and click ALL "more" buttons in the job details area
+    const jobDetailsArea = document.querySelector('.fe-job-details, .fe-job-apply, [data-test="description"]')?.parentElement || document.body;
+    const moreButtons = jobDetailsArea.querySelectorAll('.air3-truncation-btn, .up-truncation-label, button');
+
+    for (const btn of moreButtons) {
+        const text = btn.innerText.toLowerCase();
+        if (text === 'more' || text.includes('view more') || text.includes('expand')) {
+            try {
+                btn.click();
+            } catch (e) { }
+        }
+    }
+
     const candidates = [
+        document.querySelector('[data-test="description"]'), // Best candidate
+        document.querySelector('.description.text-body-sm'), // User's specific container
         document.querySelector('.job-description'),
-        document.querySelector('[data-test="description"]'),
         document.querySelector('.description'),
+        document.querySelector('.air3-truncation'),
         document.querySelector('.up-card-section p'),
     ];
+
     for (const el of candidates) {
-        if (el && el.innerText.trim()) return el.innerText.trim().slice(0, 2000);
+        if (!el) continue;
+
+        let text = el.innerText.trim();
+
+        // If the text still ends with an ellipsis or is very short, it's likely still truncated.
+        // We'll try to find the parent or a sibling that might have the content.
+        if (text.endsWith('…') || text.endsWith('...')) {
+            // Check if there's a hidden or aria-hidden element with more content
+            const hiddenContent = el.querySelector('[aria-hidden="true"], .sr-only, .hidden');
+            if (hiddenContent && hiddenContent.innerText.length > text.length) {
+                text = hiddenContent.innerText.trim();
+            }
+        }
+
+        if (text.length > 50) { // Minimum threshold for a real description
+            // Clean up common truncation noise
+            text = text.replace(/Less about\s*$/i, '')
+                .replace(/More\s*$/i, '')
+                .replace(/More\/Less about\s*$/i, '');
+
+            return text.slice(0, 8000);
+        }
     }
+
+    // Ultimate fallback: grab the largest text block in the job details section
+    const detailsSection = document.querySelector('.fe-job-details');
+    if (detailsSection) {
+        return detailsSection.innerText.trim().slice(0, 8000);
+    }
+
     return '';
 }
 
@@ -280,6 +324,16 @@ async function autoRunAutopilot() {
     // Only run once per application page instance
     if (lastProcessedUrl === window.location.href) return;
     lastProcessedUrl = window.location.href;
+
+    // PRE-CLICK: Try to expand descriptions before we even scrape
+    try {
+        const moreButtons = document.querySelectorAll('.air3-truncation-btn, .up-truncation-label');
+        moreButtons.forEach(btn => {
+            if (btn.innerText.toLowerCase().includes('more')) btn.click();
+        });
+        // Give the DOM a moment to update with the full text
+        await new Promise(r => setTimeout(r, 500));
+    } catch (e) { }
 
     showAutopilotIndicator('loading', 'AI is reading the job and generating your proposal...');
 
