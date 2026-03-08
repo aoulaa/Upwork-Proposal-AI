@@ -1,0 +1,50 @@
+[
+    {
+        "id": "proj-1",
+        "name": "Educational AI & RAG Orchestration",
+        "tech_stack": [
+            "Python",
+            "LangChain",
+            "Vector Databases",
+            "FastAPI"
+        ],
+        "core_problem_solved": "Clients had vast amounts of internal knowledge (PDFs, videos, courses) that were inaccessible and hard to query for real-time student or employee support.",
+        "measurable_result": "Architected and deployed production-ready RAG systems that deliver accurate, semantic search results and automated Q&A, reducing manual support overhead for educators."
+    },
+    {
+        "id": "proj-2",
+        "name": "High-Performance Cloud Infrastructure",
+        "tech_stack": [
+            "Go",
+            "AWS",
+            "Docker",
+            "PostgreSQL"
+        ],
+        "core_problem_solved": "Legacy backend systems struggled with scaling and high latency when processing complex API integrations and asynchronous data pipelines.",
+        "measurable_result": "Built high-performance APIs and microservices in Golang, significantly improving system reliability and response times for large-scale production environments."
+    },
+    {
+        "id": "proj-3",
+        "name": "AI-Powered EdTech SaaS (MeetLala.io)",
+        "tech_stack": [
+            "React",
+            "Next.js",
+            "Python",
+            "AI Video APIs"
+        ],
+        "core_problem_solved": "Needed a unified platform to combine video delivery, AI interaction, and secure payment processing for a seamless student experience.",
+        "measurable_result": "Delivered an end-to-end full-stack SaaS platform that successfully integrates AI-driven learning tools with production-ready payment and video workflows."
+    },
+    {
+        "id": "proj-4",
+        "name": "Crypto Signal & Sentiment Analysis Bot",
+        "tech_stack": [
+            "Python",
+            "Telegram API",
+            "AWS",
+            "Technical Analysis Libraries"
+        ],
+        "core_problem_solved": "Traders lacked a real-time automated system to aggregate market sentiment and technical indicators into actionable Telegram alerts.",
+        "measurable_result": "Developed a low-latency AI agent that processes real-time market data and news alerts, maintaining high uptime on AWS infrastructure."
+    }
+]

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upwork Autopilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/sidepanel.css" />
+</head>
+
+<body>
+
+  <!-- ── Header ─────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="logo-icon">✦</div>
+      <div class="header-text">
+        <span class="header-title">Proposal AI</span>
+        <span class="header-sub">Upwork Professional Writer</span>
+      </div>
+    </div>
+    <div id="status-badge" class="badge badge--idle">Idle</div>
+  </header>
+
+  <!-- ── API Key Setup (shown until key is saved) ──── -->
+  <section id="setup-section" class="section setup-section hidden">
+    <p class="setup-hint">Enter your <strong>Gemini API Key</strong> to get started.</p>
+    <div class="input-row">
+      <input type="password" id="api-key-input" class="text-input" placeholder="AIza..." />
+      <button id="save-key-btn" class="btn btn--primary btn--sm">Save</button>
+    </div>
+    <a class="setup-link" href="https://aistudio.google.com/app/apikey" target="_blank">Get a free key →</a>
+  </section>
+
+  <!-- ── Main Panel ─────────────────────────────────── -->
+  <main id="main-section" class="section hidden">
+    <div class="card card--fill">
+      <div class="card-header">
+        <span class="step-pill step-pill--green">✓</span>
+        <span class="card-title">Autopilot is Ready</span>
+      </div>
+      <p class="card-hint" style="margin-bottom: 0;">Whenever you click <strong>Apply Now</strong> on an Upwork job,
+        your custom AI proposal will be generated and inserted automatically!</p>
+    </div>
+  </main>
+
+  <!-- ── Toast Notification ─────────────────────────── -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- ── Footer ─────────────────────────────────────── -->
+  <footer class="footer">
+    <button id="reset-key-btn" class="footer-link">Change API Key</button>
+    <span class="footer-sep">·</span>
+    <span class="footer-version">v1.0.0</span>
+  </footer>
+
+  <script type="module" src="../sidepanel.js"></script>
+</body>
+
+</html>

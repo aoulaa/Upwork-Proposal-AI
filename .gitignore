@@ -1,0 +1,16 @@
+# macOS System Files
+.DS_Store
+
+# Chrome Extension Developer Files
+*.pem
+*.crx
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js
+node_modules/
+npm-debug.log*

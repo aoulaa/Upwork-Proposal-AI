@@ -1,0 +1,46 @@
+{
+  "profile_summary": {
+    "name": "Olimbek N.",
+    "title": "Senior Fullstack Engineer| Python & Go | Backend & AI Development",
+    "overview": "I help companies, startups, and educators turn documents, courses, PDFs, videos, and internal knowledge into reliable AI systems using Retrieval-Augmented Generation (RAG). Most freelancers connect an LLM and stop; I design the entire AI architecture so the system is accurate, fast, secure, and usable by real users. Specialized in Educational AI, RAG orchestration, and high-performance backend infrastructure.",
+    "location": "Bukhara, Uzbekistan",
+    "hourly_rate": "35$/hr",
+    "badge": "Top Rated Plus",
+    "total_jobs": 24,
+    "total_hours": 2047,
+    "availability": "More than 30 hrs/week",
+    "response_time": "< 24 hrs"
+  },
+  "technical_skills": {
+    "languages": [
+      "Python",
+      "Go (Golang)",
+      "JavaScript (TypeScript)"
+    ],
+    "frameworks": [
+      "FastAPI",
+      "Django",
+      "LangChain",
+      "React",
+      "Next.js"
+    ],
+    "infrastructure": [
+      "AWS (Lambda, S3, RDS)",
+      "Docker",
+      "CI/CD",
+      "PostgreSQL",
+      "Vector Databases"
+    ],
+    "specializations": [
+      "RAG Systems",
+      "AI Agents",
+      "Knowledge Chatbots",
+      "High-performance APIs"
+    ]
+  },
+  "verified_stats": {
+    "upwork_earnings": "Over $80,000",
+    "github": "Olimbek Nizomov",
+    "stack_overflow": "aoulaa"
+  }
+}
