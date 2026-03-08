@@ -221,8 +221,48 @@ function extractJobDescription() {
     return '';
 }
 
+// ─── Special Field Handlers ──────────────────────────────────────────────────
+async function handleRateIncrease() {
+    try {
+        // Look for the "How often do you want a rate increase?" label
+        const labels = Array.from(document.querySelectorAll('label, .up-label, p.text-dark'));
+        const targetLabel = labels.find(l => l.innerText.includes('How often do you want a rate increase?'));
+
+        if (!targetLabel) return;
+
+        // The dropdown is usually a sibling or inside a parent container
+        const container = targetLabel.closest('.mb-8x, .air3-form-card') || targetLabel.parentElement;
+        const dropdown = container?.querySelector('.air3-dropdown');
+
+        if (!dropdown) return;
+
+        const toggle = dropdown.querySelector('[data-test="dropdown-toggle"]');
+        if (!toggle) return;
+
+        const currentLabel = toggle.querySelector('.air3-dropdown-toggle-label');
+        if (currentLabel && currentLabel.innerText.trim() === 'Never') return;
+
+        // Open the dropdown
+        toggle.click();
+
+        // Wait for the menu to animate in (Upwork uses portals for menus)
+        await new Promise(r => setTimeout(r, 500));
+
+        // Find the "Never" option in the document
+        const items = Array.from(document.querySelectorAll('.air3-menu-item, [role="option"], .air3-dropdown-menu li'));
+        const neverOption = items.find(i => i.innerText.trim() === 'Never');
+
+        if (neverOption) {
+            neverOption.click();
+            console.log("Upwork Autopilot: Automatically set rate increase to 'Never'");
+        }
+    } catch (e) {
+        console.error("Upwork Autopilot: Error setting rate increase:", e);
+    }
+}
+
 // ─── Form Filler ─────────────────────────────────────────────────────────────
-function fillForm(fields) {
+async function fillForm(fields) {
     const appForm = document.querySelector('.fe-job-apply, .fe-ui-application-vue');
     const scope = appForm || document;
 
@@ -256,6 +296,9 @@ function fillForm(fields) {
         }
     }
 
+    // Automatically handle the rate increase frequency dropdown
+    await handleRateIncrease();
+
     return {
         success: errors.length < fields.filter((f) => f.generatedText).length,
         filled,
@@ -270,7 +313,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 
     if (message.type === 'FILL_FORM') {
-        sendResponse(fillForm(message.fields));
+        fillForm(message.fields).then(sendResponse);
+        return true; // Keep channel open for async response
     }
 });
 
@@ -355,12 +399,13 @@ async function autoRunAutopilot() {
         }
 
         if (response.success) {
-            const fillData = fillForm(response.generatedFields);
-            if (fillData.success) {
-                showAutopilotIndicator('success', `Proposal generated! Filled ${fillData.filled} fields.`);
-            } else {
-                showAutopilotIndicator('error', 'Generated, but failed to fill all fields.');
-            }
+            fillForm(response.generatedFields).then(fillData => {
+                if (fillData.success) {
+                    showAutopilotIndicator('success', `Proposal generated! Filled ${fillData.filled} fields.`);
+                } else {
+                    showAutopilotIndicator('error', 'Generated, but failed to fill all fields.');
+                }
+            });
         } else {
             showAutopilotIndicator('error', response.error || 'Failed to generate proposal.');
         }
